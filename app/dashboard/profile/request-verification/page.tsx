@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -17,18 +17,19 @@ export default function RequestVerificationPage() {
   })
 
   const router = useRouter()
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkExistingRequest()
   }, [])
 
   async function checkExistingRequest() {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) return
 
-      const { data } = await supabase
+      const { data } = await supabaseRef.current
         .from('verification_requests')
         .select('*')
         .eq('user_id', user.id)
@@ -53,14 +54,14 @@ export default function RequestVerificationPage() {
 
     setLoading(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) {
         alert('You must be logged in')
         return
       }
 
       // Create verification request
-      const { error } = await supabase
+      const { error } = await supabaseRef.current
         .from('verification_requests')
         .insert({
           user_id: user.id,
@@ -76,7 +77,7 @@ export default function RequestVerificationPage() {
       if (error) throw error
 
       // Update profile with requested timestamp
-      await supabase
+      await supabaseRef.current
         .from('profiles')
         .update({
           id_verification_requested_at: new Date().toISOString(),

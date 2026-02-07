@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -23,15 +23,16 @@ export default function BillingPage() {
   const [loadingPortal, setLoadingPortal] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
   const router = useRouter()
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkAuth()
   }, [])
 
   async function checkAuth() {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     if (!user) {
       router.push('/auth/login')
       return
@@ -42,7 +43,7 @@ export default function BillingPage() {
 
   async function loadProfile(userId: string) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseRef.current
         .from('profiles')
         .select(
           'subscription_tier, subscription_status, subscription_started_at, subscription_ends_at, subscription_cancelled_at, auto_renew, stripe_customer_id'
@@ -64,7 +65,7 @@ export default function BillingPage() {
   async function handleManageSubscription() {
     setLoadingPortal(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) {
         router.push('/auth/login')
         return
@@ -92,7 +93,7 @@ export default function BillingPage() {
   }
 
   async function handleUpgrade() {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     if (!user) {
       router.push('/auth/login')
       return

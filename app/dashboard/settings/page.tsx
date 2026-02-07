@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -34,15 +34,16 @@ export default function SettingsPage() {
     show_in_directory: true,
   })
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
   const router = useRouter()
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkAuth()
   }, [])
 
   async function checkAuth() {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     if (!user) {
       router.push('/auth/login')
       return
@@ -53,7 +54,7 @@ export default function SettingsPage() {
 
   async function loadProfile(userId: string) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseRef.current
         .from('profiles')
         .select('*')
         .eq('id', userId)
@@ -84,7 +85,7 @@ export default function SettingsPage() {
     setMessage(null)
 
     try {
-      const { error } = await supabase
+      const { error } = await supabaseRef.current
         .from('profiles')
         .update({
           display_name: formData.display_name,

@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { ForumCategory, ForumTopicWithAuthor } from '@/lib/types/forum'
@@ -14,21 +14,22 @@ export default function ForumsPage() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkUser()
     loadCategories()
     loadRecentTopics()
   }, [])
 
   async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     setUser(user)
   }
 
   async function loadCategories() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseRef.current
       .from('forum_categories')
       .select('*')
       .eq('is_active', true)
@@ -42,16 +43,16 @@ export default function ForumsPage() {
 
       for (const category of data) {
         // Count topics in this category
-        const { count: topicCount } = await supabase
+        const { count: topicCount } = await supabaseRef.current
           .from('forum_topics')
           .select('*', { count: 'exact', head: true })
           .eq('category_id', category.id)
 
         // Count posts in this category
-        const { count: postCount } = await supabase
+        const { count: postCount } = await supabaseRef.current
           .from('forum_posts')
           .select('id', { count: 'exact', head: true })
-          .in('topic_id', (await supabase
+          .in('topic_id', (await supabaseRef.current
             .from('forum_topics')
             .select('id')
             .eq('category_id', category.id)).data?.map((t: any) => t.id) || [])
@@ -68,7 +69,7 @@ export default function ForumsPage() {
   }
 
   async function loadRecentTopics() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseRef.current
       .from('forum_topics')
       .select(`
         *,
