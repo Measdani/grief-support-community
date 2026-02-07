@@ -10,6 +10,14 @@ interface ReportWithReporter extends Report {
     display_name: string | null
     email: string
   }
+  forum_post?: {
+    content: string
+    topic_id: string
+    forum_topic?: {
+      title: string
+      slug: string
+    }
+  }
 }
 
 export default function AdminReportsPage() {
