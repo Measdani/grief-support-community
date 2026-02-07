@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PremiumMembershipModal from '@/components/PremiumMembershipModal'
+
+export const dynamic = 'force-dynamic'
 
 interface ConnectionWithUser {
   id: string
@@ -29,14 +31,16 @@ export default function ConnectionsPage() {
   const [activeTab, setActiveTab] = useState<'friends' | 'pending' | 'sent'>('friends')
   const [showPremiumModal, setShowPremiumModal] = useState(false)
 
-  const supabase = createClient()
   const router = useRouter()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkUser()
   }, [])
 
   async function checkUser() {
+    const supabase = supabaseRef.current
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -61,6 +65,7 @@ export default function ConnectionsPage() {
   }
 
   async function loadConnections(userId: string) {
+    const supabase = supabaseRef.current
     try {
       // Get accepted connections
       const { data: accepted } = await supabase
@@ -142,6 +147,7 @@ export default function ConnectionsPage() {
   }
 
   async function acceptRequest(connectionId: string) {
+    const supabase = supabaseRef.current
     const { error } = await supabase
       .from('user_connections')
       .update({ status: 'accepted', responded_at: new Date().toISOString() })
@@ -153,6 +159,7 @@ export default function ConnectionsPage() {
   }
 
   async function declineRequest(connectionId: string) {
+    const supabase = supabaseRef.current
     const { error } = await supabase
       .from('user_connections')
       .update({ status: 'declined', responded_at: new Date().toISOString() })
@@ -164,6 +171,7 @@ export default function ConnectionsPage() {
   }
 
   async function removeConnection(connectionId: string) {
+    const supabase = supabaseRef.current
     const { error } = await supabase
       .from('user_connections')
       .delete()

@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 interface DashboardStats {
   totalUsers: number
@@ -20,13 +22,15 @@ export default function AdminDashboard() {
   const [isAdmin, setIsAdmin] = useState(false)
 
   const router = useRouter()
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkAdminAccess()
   }, [])
 
   async function checkAdminAccess() {
+    const supabase = supabaseRef.current
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
@@ -51,6 +55,7 @@ export default function AdminDashboard() {
   }
 
   async function loadStats() {
+    const supabase = supabaseRef.current
     try {
       const { count: totalUsers } = await supabase.from('profiles').select('id', { count: 'exact' })
       const { count: verifiedUsers } = await supabase

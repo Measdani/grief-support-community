@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import type { VerificationRequest, UserProfile } from '@/lib/types/verification'
+
+export const dynamic = 'force-dynamic'
 
 interface VerificationRequestWithProfile extends VerificationRequest {
   profile: UserProfile
@@ -13,13 +15,15 @@ export default function AdminVerificationsPage() {
   const [requests, setRequests] = useState<VerificationRequestWithProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending')
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     loadVerificationRequests()
   }, [filter])
 
   async function loadVerificationRequests() {
+    const supabase = supabaseRef.current
     setLoading(true)
     try {
       let query = supabase
@@ -46,6 +50,7 @@ export default function AdminVerificationsPage() {
   }
 
   async function approveVerification(requestId: string, userId: string, requestType: string) {
+    const supabase = supabaseRef.current
     try {
       // Update verification request
       const { error: requestError } = await supabase
@@ -87,6 +92,7 @@ export default function AdminVerificationsPage() {
   }
 
   async function rejectVerification(requestId: string, reason: string) {
+    const supabase = supabaseRef.current
     if (!reason) {
       alert('Please provide a rejection reason')
       return

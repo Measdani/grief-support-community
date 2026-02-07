@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ImageUpload } from '@/components/ImageUpload'
 import { uploadMemorialPhoto } from '@/lib/utils/file-upload'
+
+export const dynamic = 'force-dynamic'
 
 interface Memorial {
   id: string
@@ -100,10 +102,11 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   const [tributeSubmitting, setTributeSubmitting] = useState(false)
   const [candleSubmitting, setCandleSubmitting] = useState(false)
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
   const router = useRouter()
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     loadMemorial()
     loadTributes()
     loadCandles()
@@ -121,6 +124,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }, [memorial?.created_by, currentUserId])
 
   async function getCurrentUser() {
+    const supabase = supabaseRef.current
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       setCurrentUserId(user.id)
@@ -128,6 +132,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function loadCreatorProfile() {
+    const supabase = supabaseRef.current
     if (!memorial) return
 
     try {
@@ -145,6 +150,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function loadConnectionStatus() {
+    const supabase = supabaseRef.current
     if (!memorial || !currentUserId) return
 
     try {
@@ -170,6 +176,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function handleAddFriend() {
+    const supabase = supabaseRef.current
     if (!currentUserId || !memorial) {
       router.push('/auth/login')
       return
@@ -200,6 +207,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function handleCancelRequest() {
+    const supabase = supabaseRef.current
     if (!connectionId) return
 
     try {
@@ -219,6 +227,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function loadMemorial() {
+    const supabase = supabaseRef.current
     try {
       const { data, error } = await supabase
         .from('memorials')
@@ -243,6 +252,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function loadTributes() {
+    const supabase = supabaseRef.current
     try {
       const { data, error } = await supabase
         .from('memorial_tributes')
@@ -262,6 +272,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function loadCandles() {
+    const supabase = supabaseRef.current
     try {
       const { data, error } = await supabase
         .from('memorial_candles')
@@ -282,6 +293,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function loadStoreItems() {
+    const supabase = supabaseRef.current
     try {
       const { data, error } = await supabase
         .from('memorial_store_items')
@@ -298,6 +310,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function submitTribute(e: React.FormEvent) {
+    const supabase = supabaseRef.current
     e.preventDefault()
 
     // Validation based on tribute type
@@ -362,6 +375,7 @@ export default function MemorialDetailPage({ params }: { params: { id: string } 
   }
 
   async function lightCandle(e: React.FormEvent) {
+    const supabase = supabaseRef.current
     e.preventDefault()
 
     setCandleSubmitting(true)

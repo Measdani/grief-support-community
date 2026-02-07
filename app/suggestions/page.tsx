@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { FeatureSuggestionWithSubmitter, SuggestionStatus, SUGGESTION_STATUS_LABELS, SUGGESTION_STATUS_COLORS } from '@/lib/types/suggestion'
+
+export const dynamic = 'force-dynamic'
 
 export default function SuggestionsPage() {
   const [suggestions, setSuggestions] = useState<FeatureSuggestionWithSubmitter[]>([])
@@ -12,21 +14,7 @@ export default function SuggestionsPage() {
   const [userUpvotes, setUserUpvotes] = useState<Set<string>>(new Set())
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadSuggestions()
-    loadCurrentUser()
-  }, [filter])
-
-  async function loadCurrentUser() {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      setCurrentUserId(user.id)
-      loadUserUpvotes(user.id)
-    }
-  }
-
-  async function loadUserUpvotes(userId: string) {
+  const loadUserUpvotes = useCallback(async (userId: string) => {
     const supabase = createClient()
     const { data } = await supabase
       .from('suggestion_upvotes')
@@ -36,9 +24,18 @@ export default function SuggestionsPage() {
     if (data) {
       setUserUpvotes(new Set(data.map(u => u.suggestion_id)))
     }
-  }
+  }, [])
 
-  async function loadSuggestions() {
+  const loadCurrentUser = useCallback(async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      setCurrentUserId(user.id)
+      await loadUserUpvotes(user.id)
+    }
+  }, [loadUserUpvotes])
+
+  const loadSuggestions = useCallback(async () => {
     try {
       const supabase = createClient()
       let query = supabase
@@ -63,7 +60,12 @@ export default function SuggestionsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filter])
+
+  useEffect(() => {
+    loadSuggestions()
+    loadCurrentUser()
+  }, [loadSuggestions, loadCurrentUser])
 
   async function handleUpvote(suggestionId: string) {
     if (!currentUserId) {
