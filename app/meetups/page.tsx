@@ -91,7 +91,7 @@ export default function MeetupsPage() {
 
     if (data) {
       const rsvpMap: Record<string, string> = {}
-      data.forEach(r => { rsvpMap[r.meetup_id] = r.status })
+      data.forEach((r: any) => { rsvpMap[r.meetup_id] = r.status })
       setUserRsvps(rsvpMap)
     }
   }
