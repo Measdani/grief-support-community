@@ -15,9 +15,9 @@ interface SearchResult {
     name: string
     slug: string
     icon: string | null
-  }[]
+  }
   author_id: string
-  author?: { display_name: string | null }[]
+  author?: { display_name: string | null }
   reply_count: number
   view_count: number
   is_locked: boolean
@@ -106,8 +106,15 @@ export default function ForumSearchPage() {
 
       if (error) throw error
 
+      // Normalize data - Supabase returns relations as arrays, convert to single objects
+      const normalized = (data || []).map((item: any) => ({
+        ...item,
+        category: Array.isArray(item.category) ? item.category[0] : item.category,
+        author: Array.isArray(item.author) ? item.author[0] : item.author,
+      }))
+
       // Sort results
-      let sorted = (data || []) as SearchResult[]
+      let sorted = normalized as SearchResult[]
 
       switch (sortBy) {
         case 'latest':
