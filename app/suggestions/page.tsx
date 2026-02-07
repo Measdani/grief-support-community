@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { FeatureSuggestionWithSubmitter, SuggestionStatus, SUGGESTION_STATUS_LABELS, SUGGESTION_STATUS_COLORS } from '@/lib/types/suggestion'
 
+
 export const dynamic = 'force-dynamic'
 
 export default function SuggestionsPage() {

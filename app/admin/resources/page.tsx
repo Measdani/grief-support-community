@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
-export const dynamic = 'force-dynamic'
   Resource,
   ResourceType,
   ResourceCategory,
@@ -13,6 +12,7 @@ export const dynamic = 'force-dynamic'
   resourceCategoryLabels,
 } from '@/lib/types/resource'
 
+export const dynamic = 'force-dynamic'
 
 export default function AdminResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([])

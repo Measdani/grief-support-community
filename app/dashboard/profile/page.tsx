@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { UserProfile, VERIFICATION_LEVELS, getNextVerificationStep } from '@/lib/types/verification'
 import { VerificationBadge } from '@/components/VerificationBadge'
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 
-export const dynamic = 'force-dynamic'
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null)

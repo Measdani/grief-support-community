@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import type { VerificationRequest, UserProfile } from '@/lib/types/verification'
 
+
 export const dynamic = 'force-dynamic'
 
 interface VerificationRequestWithProfile extends VerificationRequest {

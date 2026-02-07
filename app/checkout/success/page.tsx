@@ -3,7 +3,6 @@
 import { Suspense } from 'react'
 import CheckoutSuccessContent from './CheckoutSuccessContent'
 
-export const dynamic = 'force-dynamic'
 
 export default function CheckoutSuccessPage() {
   return (

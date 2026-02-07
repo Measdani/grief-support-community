@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation'
 import { StoreProduct, ProductType, ProductStatus } from '@/lib/types/store'
 import { ImageUpload } from '@/components/ImageUpload'
 import { uploadProductAsset } from '@/lib/utils/file-upload'
-export const dynamic = 'force-dynamic'
 
+
+export const dynamic = 'force-dynamic'
 
 const PRODUCT_TYPES: ProductType[] = ['icon', 'image', 'card', 'keepsake']
 const PRODUCT_STATUSES: ProductStatus[] = ['active', 'draft', 'archived']

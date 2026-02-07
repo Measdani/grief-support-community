@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { ImageUpload } from '@/components/ImageUpload'
 import { uploadMemorialPhoto } from '@/lib/utils/file-upload'
 
+
 export const dynamic = 'force-dynamic'
 
 interface Memorial {
