@@ -76,3 +76,7 @@ export interface ForumCategoryWithLatestTopic extends ForumCategory {
     last_post_at: string
   }
 }
+
+export interface ForumPostWithAuthorAndReplies extends ForumPostWithAuthor {
+  replies?: ForumPostWithAuthor[]
+}

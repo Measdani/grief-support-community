@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { ForumTopic, ForumPostWithAuthor, ForumCategory } from '@/lib/types/forum'
+import { ForumTopic, ForumPostWithAuthorAndReplies, ForumCategory } from '@/lib/types/forum'
 import { PostCard } from '@/components/forums/PostCard'
 
 export default function ForumTopicPage() {
   const [topic, setTopic] = useState<ForumTopic | null>(null)
   const [category, setCategory] = useState<ForumCategory | null>(null)
-  const [posts, setPosts] = useState<ForumPostWithAuthor[]>([])
+  const [posts, setPosts] = useState<ForumPostWithAuthorAndReplies[]>([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const [replyContent, setReplyContent] = useState('')
@@ -76,7 +76,7 @@ export default function ForumTopicPage() {
         .order('created_at', { ascending: true })
 
       if (postsData) {
-        setPosts(postsData as any)
+        setPosts(postsData as ForumPostWithAuthorAndReplies[])
       }
 
       // Load user's likes if logged in
