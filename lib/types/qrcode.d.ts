@@ -1,7 +1,7 @@
 declare module 'qrcode' {
   export interface QRCodeToDataURLOptions {
     errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H'
-    type?: 'image/png' | 'image/svg+xml' | 'image/jpeg'
+    type?: 'image/png' | 'image/svg+xml' | 'image/jpeg' | 'svg' | 'png'
     quality?: number
     margin?: number
     width?: number
