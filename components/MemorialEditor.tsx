@@ -37,8 +37,8 @@ interface FormData {
   allow_photos: boolean
   // Premium features
   slug?: string
-  theme_id?: string | null
-  video_url?: string | null
+  theme_id: string | null
+  video_url: string | null
 }
 
 export default function MemorialEditor({
