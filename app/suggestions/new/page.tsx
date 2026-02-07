@@ -25,7 +25,6 @@ export default function NewSuggestionPage() {
     category: 'general' as SuggestionCategory
   })
 
-  const supabase = createClient()
   const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -38,6 +37,7 @@ export default function NewSuggestionPage() {
 
     setLoading(true)
     try {
+      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         alert('You must be logged in to submit suggestions')

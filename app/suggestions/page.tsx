@@ -12,14 +12,13 @@ export default function SuggestionsPage() {
   const [userUpvotes, setUserUpvotes] = useState<Set<string>>(new Set())
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
-  const supabase = createClient()
-
   useEffect(() => {
     loadSuggestions()
     loadCurrentUser()
   }, [filter])
 
   async function loadCurrentUser() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
       setCurrentUserId(user.id)
@@ -28,6 +27,7 @@ export default function SuggestionsPage() {
   }
 
   async function loadUserUpvotes(userId: string) {
+    const supabase = createClient()
     const { data } = await supabase
       .from('suggestion_upvotes')
       .select('suggestion_id')
@@ -40,6 +40,7 @@ export default function SuggestionsPage() {
 
   async function loadSuggestions() {
     try {
+      const supabase = createClient()
       let query = supabase
         .from('feature_suggestions')
         .select(`
@@ -73,6 +74,7 @@ export default function SuggestionsPage() {
     const hasUpvoted = userUpvotes.has(suggestionId)
 
     try {
+      const supabase = createClient()
       if (hasUpvoted) {
         // Remove upvote
         await supabase
