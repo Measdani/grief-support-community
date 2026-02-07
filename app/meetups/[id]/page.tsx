@@ -17,6 +17,7 @@ interface Meetup {
   location_address?: string
   location_city?: string
   location_state?: string
+  location_zip?: string
   virtual_link?: string
   virtual_platform?: string
   max_attendees?: number
@@ -254,7 +255,7 @@ export default function MeetupDetailPage() {
 
   const startDate = new Date(meetup.start_time)
   const endDate = new Date(meetup.end_time)
-  const isFull = meetup.max_attendees && meetup.attendee_count >= meetup.max_attendees
+  const isFull = meetup.max_attendees ? meetup.attendee_count >= meetup.max_attendees : false
 
   // Show premium prompt if user is not premium
   if (currentUserId && !isPremium) {
