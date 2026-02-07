@@ -1,0 +1,35 @@
+-- ============================================
+-- Product Asset Storage Setup
+-- Store digital product images and assets
+-- ============================================
+-- NOTE: Storage bucket setup is done via Supabase Dashboard (not migrations)
+--
+-- Manual Setup Required:
+-- 1. Go to Supabase Dashboard > Storage
+-- 2. Click "New Bucket"
+-- 3. Name: product-assets
+-- 4. Make Public: Yes
+-- 5. After bucket is created, go to Policies tab and add these 4 policies:
+--
+-- POLICY 1 - Insert
+--   - Operations: INSERT
+--   - Authenticated: Yes
+--   - WITH CHECK: (bucket_id = 'product-assets')
+--
+-- POLICY 2 - Select (Public Read)
+--   - Operations: SELECT
+--   - Authenticated: No (Public)
+--   - USING: (bucket_id = 'product-assets')
+--
+-- POLICY 3 - Update
+--   - Operations: UPDATE
+--   - Authenticated: Yes
+--   - USING: (bucket_id = 'product-assets')
+--
+-- POLICY 4 - Delete
+--   - Operations: DELETE
+--   - Authenticated: Yes
+--   - USING: (bucket_id = 'product-assets')
+--
+-- This migration is just for documentation.
+SELECT 1;
