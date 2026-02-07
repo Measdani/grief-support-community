@@ -2,17 +2,27 @@ import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
-})
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-)
-
 export async function POST(request: Request) {
   try {
+    const stripeKey = process.env.STRIPE_SECRET_KEY
+    const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    const premiumPriceId = process.env.STRIPE_PREMIUM_PRICE_ID
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+
+    if (!stripeKey || !sbUrl || !sbKey || !premiumPriceId || !siteUrl) {
+      return NextResponse.json(
+        { error: 'Service configuration error' },
+        { status: 500 }
+      )
+    }
+
+    const stripe = new Stripe(stripeKey, {
+      apiVersion: '2023-10-16',
+    })
+
+    const supabaseAdmin = createClient(sbUrl, sbKey)
+
     const { userId } = await request.json()
 
     if (!userId) {
@@ -62,12 +72,12 @@ export async function POST(request: Request) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: process.env.STRIPE_PREMIUM_PRICE_ID!,
+          price: premiumPriceId,
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/settings/billing?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing?cancelled=true`,
+      success_url: `${siteUrl}/settings/billing?success=true`,
+      cancel_url: `${siteUrl}/pricing?cancelled=true`,
       metadata: {
         user_id: userId,
         type: 'subscription',
