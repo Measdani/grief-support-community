@@ -10,9 +10,14 @@ interface SearchResult {
   id: string
   title: string
   category_id: string
-  category?: ForumCategory
+  category?: {
+    id: string
+    name: string
+    slug: string
+    icon: string | null
+  }[]
   author_id: string
-  author?: { display_name: string | null }
+  author?: { display_name: string | null }[]
   reply_count: number
   view_count: number
   is_locked: boolean
@@ -105,7 +110,7 @@ export default function ForumSearchPage() {
       let sorted = (data || []) as SearchResult[]
 
       switch (sortBy) {
-        case 'newest':
+        case 'latest':
           sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
           break
         case 'replies':
