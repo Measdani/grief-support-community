@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ForumTopic, ForumCategory } from '@/lib/types/forum'
+import { ForumCategory } from '@/lib/types/forum'
 
 interface SubscribedTopic {
   id: string
@@ -75,12 +75,15 @@ export default function SubscriptionsPage() {
 
       if (error) throw error
 
-      // Flatten the response
-      const flattenedTopics = (data || []).map(sub => ({
-        ...sub.forum_topics,
-        category: sub.forum_topics.category,
-        author: sub.forum_topics.author,
-      } as SubscribedTopic))
+      // Flatten the response - Supabase returns nested relations as arrays, convert to single objects
+      const flattenedTopics = (data || []).map((sub: any) => {
+        const topic = Array.isArray(sub.forum_topics) ? sub.forum_topics[0] : sub.forum_topics
+        return {
+          ...topic,
+          category: Array.isArray(topic.category) ? topic.category[0] : topic.category,
+          author: Array.isArray(topic.author) ? topic.author[0] : topic.author,
+        } as SubscribedTopic
+      })
 
       setTopics(flattenedTopics)
     } catch (error) {
