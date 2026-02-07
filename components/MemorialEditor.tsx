@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useEffect, useState, useRef } from 'react'
+import { createClient } from '@/lib/supabaseRef.current/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ImageUpload } from '@/components/ImageUpload'
@@ -82,23 +82,24 @@ export default function MemorialEditor({
   const [newLinkTitle, setNewLinkTitle] = useState('')
 
   const router = useRouter()
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
 
   // Load user profile and existing memorial (if edit mode)
   useEffect(() => {
+    supabaseRef.current = createClient()
     loadInitialData()
   }, [])
 
   async function loadInitialData() {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) {
         router.push('/auth/login')
         return
       }
 
       // Get user profile
-      const { data: profile } = await supabase
+      const { data: profile } = await supabaseRef.current
         .from('profiles')
         .select('subscription_tier')
         .eq('id', user.id)
@@ -109,7 +110,7 @@ export default function MemorialEditor({
 
       // If editing, load existing memorial
       if (mode === 'edit' && memorialId) {
-        const { data: memorial, error } = await supabase
+        const { data: memorial, error } = await supabaseRef.current
           .from('memorials')
           .select('*')
           .eq('id', memorialId)
@@ -174,7 +175,7 @@ export default function MemorialEditor({
     setUploadingPhotos(true)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) {
         alert('You must be logged in')
         return
@@ -189,7 +190,7 @@ export default function MemorialEditor({
       // Generate slug for new memorials
       let finalSlug = formData.slug
       if (mode === 'create') {
-        finalSlug = await generateUniqueSlug(`${formData.first_name} ${formData.last_name}`, supabase)
+        finalSlug = await generateUniqueSlug(`${formData.first_name} ${formData.last_name}`, supabaseRef.current)
       }
 
       const memorialData = {
@@ -218,7 +219,7 @@ export default function MemorialEditor({
 
       let memorial
       if (mode === 'create') {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseRef.current
           .from('memorials')
           .insert(memorialData)
           .select()
@@ -227,7 +228,7 @@ export default function MemorialEditor({
         if (error) throw error
         memorial = data
       } else {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseRef.current
           .from('memorials')
           .update(memorialData)
           .eq('id', memorialId)
@@ -268,7 +269,7 @@ export default function MemorialEditor({
 
       // Update with photo URLs
       if (profilePhotoUrl || coverPhotoUrl) {
-        await supabase
+        await supabaseRef.current
           .from('memorials')
           .update({
             profile_photo_url: profilePhotoUrl,

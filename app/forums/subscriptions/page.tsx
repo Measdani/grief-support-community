@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -29,16 +29,17 @@ export default function SubscriptionsPage() {
   const [user, setUser] = useState<any>(null)
   const [unsubscribeConfirm, setUnsubscribeConfirm] = useState<string | null>(null)
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
   const router = useRouter()
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkUserAndLoad()
   }, [])
 
   async function checkUserAndLoad() {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) {
         router.push('/auth/login')
         return
@@ -53,7 +54,7 @@ export default function SubscriptionsPage() {
   async function loadSubscriptions(userId: string) {
     try {
       setLoading(true)
-      const { data, error } = await supabase
+      const { data, error } = await supabaseRef.current
         .from('forum_subscriptions')
         .select(`
           topic_id,
@@ -97,7 +98,7 @@ export default function SubscriptionsPage() {
 
   async function handleUnsubscribe(topicId: string) {
     try {
-      const { error } = await supabase
+      const { error } = await supabaseRef.current
         .from('forum_subscriptions')
         .delete()
         .eq('user_id', user.id)

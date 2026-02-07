@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -39,10 +39,11 @@ export default function ForumSearchPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [categories, setCategories] = useState<ForumCategory[]>([])
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     const q = searchParams.get('q') || ''
     setSearchTerm(q)
     loadCategories()
@@ -61,7 +62,7 @@ export default function ForumSearchPage() {
 
   async function loadCategories() {
     try {
-      const { data } = await supabase
+      const { data } = await supabaseRef.current
         .from('forum_categories')
         .select('*')
         .eq('is_active', true)
@@ -81,7 +82,7 @@ export default function ForumSearchPage() {
 
     setLoading(true)
     try {
-      let dbQuery = supabase
+      let dbQuery = supabaseRef.current
         .from('forum_topics')
         .select(`
           id,

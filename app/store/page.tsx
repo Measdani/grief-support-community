@@ -2,7 +2,8 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useCart } from '@/lib/context/CartContext'
@@ -24,7 +25,7 @@ interface Memorial {
   last_name: string
 }
 
-export default function StorePage() {
+function StorePageContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedType, setSelectedType] = useState<string>('all')
@@ -35,8 +36,10 @@ export default function StorePage() {
   const { addItem, itemCount } = useCart()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkUser()
     loadProducts()
     loadUserMemorials()
@@ -49,8 +52,7 @@ export default function StorePage() {
   }, [selectedType])
 
   async function checkUser() {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     setUser(user)
   }
 
@@ -71,11 +73,10 @@ export default function StorePage() {
   }
 
   async function loadUserMemorials() {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     if (!user) return
 
-    const { data } = await supabase
+    const { data } = await supabaseRef.current
       .from('memorials')
       .select('id, first_name, last_name')
       .eq('created_by', user.id)
@@ -238,5 +239,13 @@ export default function StorePage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function StorePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StorePageContent />
+    </Suspense>
   )
 }
