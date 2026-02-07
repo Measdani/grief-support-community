@@ -102,10 +102,10 @@ export default function ConnectionsPage() {
         .select('id, display_name, avatar_url, verification_status')
         .in('id', Array.from(userIds))
 
-      const userMap = new Map(users?.map(u => [u.id, u]) || [])
+      const userMap = new Map(users?.map((u: any) => [u.id, u]) || [])
 
       // Process accepted connections
-      const processedAccepted = (accepted || []).map(c => ({
+      const processedAccepted = (accepted || []).map((c: any) => ({
         ...c,
         user: userMap.get(c.requester_id === userId ? c.addressee_id : c.requester_id) || {
           id: '',
@@ -116,7 +116,7 @@ export default function ConnectionsPage() {
       }))
 
       // Process pending requests
-      const processedPending = (pending || []).map(c => ({
+      const processedPending = (pending || []).map((c: any) => ({
         ...c,
         user: userMap.get(c.requester_id) || {
           id: c.requester_id,
@@ -127,7 +127,7 @@ export default function ConnectionsPage() {
       }))
 
       // Process sent requests
-      const processedSent = (sent || []).map(c => ({
+      const processedSent = (sent || []).map((c: any) => ({
         ...c,
         user: userMap.get(c.addressee_id) || {
           id: c.addressee_id,
