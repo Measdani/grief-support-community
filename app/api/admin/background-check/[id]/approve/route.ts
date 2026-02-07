@@ -8,11 +8,12 @@ const supabaseAdmin = createClient(
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { adminNotes } = await request.json()
-    const applicationId = params.id
+    const { id } = await params
+    const applicationId = id
 
     // Get application and check access
     const { data: app, error: appError } = await supabaseAdmin
