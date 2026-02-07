@@ -202,7 +202,9 @@ export default function ForumCategoriesPage() {
 
     const newIndex = direction === 'up' ? index - 1 : index + 1
     const newCategories: ForumCategory[] = [...categories]
-    [newCategories[index], newCategories[newIndex]] = [newCategories[newIndex], newCategories[index]]
+    const temp = newCategories[index]
+    newCategories[index] = newCategories[newIndex]
+    newCategories[newIndex] = temp
 
     // Update order in database
     try {
