@@ -60,9 +60,8 @@ export default function PricingPage() {
 
       if (data.sessionId) {
         // Redirect to Stripe checkout
-        const stripeScript = document.querySelector('script[src*="stripe"]') as any
-        if (window.Stripe) {
-          const stripe = await window.Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+        if ((window as any).Stripe) {
+          const stripe = await (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
           await stripe.redirectToCheckout({ sessionId: data.sessionId })
         }
       }
