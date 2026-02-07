@@ -10,13 +10,12 @@ export default function SponsorsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedTier, setSelectedTier] = useState<string>('all')
 
-  const supabase = createClient()
-
   useEffect(() => {
     loadSponsors()
   }, [selectedTier])
 
   async function loadSponsors() {
+    const supabase = createClient()
     try {
       let query = supabase
         .from('sponsors')

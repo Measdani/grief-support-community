@@ -14,7 +14,6 @@ export default function PricingPage() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [checkingOut, setCheckingOut] = useState(false)
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -22,6 +21,7 @@ export default function PricingPage() {
   }, [])
 
   async function loadUser() {
+    const supabase = createClient()
     try {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)

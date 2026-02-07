@@ -51,7 +51,6 @@ export default function CreateMeetupPage() {
     virtual_platform: 'zoom',
   })
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -59,6 +58,7 @@ export default function CreateMeetupPage() {
   }, [])
 
   async function checkOrganizerStatus() {
+    const supabase = createClient()
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -96,6 +96,7 @@ export default function CreateMeetupPage() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
+    const supabase = createClient()
     e.preventDefault()
     setSubmitting(true)
     setMessage(null)

@@ -24,13 +24,12 @@ export default function ResourcesPage() {
   const [categoryFilter, setCategoryFilter] = useState<ResourceCategory | 'all'>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
-  const supabase = createClient()
-
   useEffect(() => {
     loadResources()
   }, [typeFilter, categoryFilter])
 
   async function loadResources() {
+    const supabase = createClient()
     try {
       // Load featured resources (hotlines, crisis support)
       const { data: featured } = await supabase

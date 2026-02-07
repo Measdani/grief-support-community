@@ -30,7 +30,6 @@ export default function StorePage() {
   const [userMemorials, setUserMemorials] = useState<Memorial[]>([])
   const [user, setUser] = useState<any>(null)
 
-  const supabase = createClient()
   const { addItem, itemCount } = useCart()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -48,6 +47,7 @@ export default function StorePage() {
   }, [selectedType])
 
   async function checkUser() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     setUser(user)
   }
@@ -69,6 +69,7 @@ export default function StorePage() {
   }
 
   async function loadUserMemorials() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 

@@ -14,13 +14,13 @@ export default function MessagesPage() {
   const [showPremiumModal, setShowPremiumModal] = useState(false)
 
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
     checkAuth()
   }, [])
 
   async function checkAuth() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -45,6 +45,7 @@ export default function MessagesPage() {
   }
 
   async function loadConversations(userId: string) {
+    const supabase = createClient()
     try {
       const { data: conversationData, error } = await supabase
         .from('conversations')
