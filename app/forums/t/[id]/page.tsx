@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { ForumTopic, ForumPostWithAuthorAndReplies, ForumCategory } from '@/lib/types/forum'
 import { PostCard } from '@/components/forums/PostCard'
+export const dynamic = 'force-dynamic'
 
 export default function ForumTopicPage() {
   const [topic, setTopic] = useState<ForumTopic | null>(null)

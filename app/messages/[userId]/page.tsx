@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { MessageWithAuthor } from '@/lib/types/message'
+export const dynamic = 'force-dynamic'
 
 export default function ConversationPage() {
   const [messages, setMessages] = useState<MessageWithAuthor[]>([])

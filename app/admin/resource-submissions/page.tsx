@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ResourceSubmission, resourceTypeLabels, resourceTypeIcons, resourceCategoryLabels } from '@/lib/types/resource'
+export const dynamic = 'force-dynamic'
 
 export default function ResourceSubmissionsPage() {
   const [submissions, setSubmissions] = useState<ResourceSubmission[]>([])

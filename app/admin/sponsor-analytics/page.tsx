@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Sponsor } from '@/lib/types/sponsor'
+export const dynamic = 'force-dynamic'
 
 interface SponsorAnalytics extends Sponsor {
   ctr?: number // Click-through rate

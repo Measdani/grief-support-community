@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ConversationWithParticipant } from '@/lib/types/message'
 import PremiumMembershipModal from '@/components/PremiumMembershipModal'
+export const dynamic = 'force-dynamic'
 
 export default function MessagesPage() {
   const [conversations, setConversations] = useState<ConversationWithParticipant[]>([])

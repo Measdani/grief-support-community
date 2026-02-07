@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { Report, reportTypeLabels } from '@/lib/types/messaging'
+export const dynamic = 'force-dynamic'
 
 interface ReportWithReporter extends Report {
   reporter?: {

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
+export const dynamic = 'force-dynamic'
 
 interface UserProfile {
   id: string
