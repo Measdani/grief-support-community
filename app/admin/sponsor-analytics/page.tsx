@@ -17,7 +17,6 @@ export default function SponsorAnalyticsPage() {
   const [selectedSponsor, setSelectedSponsor] = useState<SponsorAnalytics | null>(null)
   const [dateRange, setDateRange] = useState<'all' | '7d' | '30d' | '90d'>('30d')
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -25,6 +24,7 @@ export default function SponsorAnalyticsPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -51,6 +51,7 @@ export default function SponsorAnalyticsPage() {
   }
 
   async function loadAnalytics() {
+    const supabase = createClient()
     try {
       const { data, error } = await supabase
         .from('sponsors')

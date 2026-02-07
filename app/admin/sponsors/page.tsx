@@ -15,7 +15,6 @@ export default function SponsorsPage() {
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-  const supabase = createClient()
   const router = useRouter()
 
   const tiers: SponsorTier[] = ['platinum', 'gold', 'silver', 'bronze', 'community']
@@ -25,6 +24,7 @@ export default function SponsorsPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -51,6 +51,7 @@ export default function SponsorsPage() {
   }
 
   async function loadSponsors() {
+    const supabase = createClient()
     try {
       let query = supabase
         .from('sponsors')
@@ -73,6 +74,7 @@ export default function SponsorsPage() {
   }
 
   async function updateSponsorStatus(sponsorId: string, newStatus: string) {
+    const supabase = createClient()
     setUpdatingId(sponsorId)
     try {
       const { error } = await supabase
@@ -100,6 +102,7 @@ export default function SponsorsPage() {
   }
 
   async function deleteSponsor(sponsorId: string) {
+    const supabase = createClient()
     if (!window.confirm('Are you sure you want to delete this sponsor?')) return
 
     try {

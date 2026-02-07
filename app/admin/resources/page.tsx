@@ -39,7 +39,6 @@ export default function AdminResourcesPage() {
     display_order: 0,
   })
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -47,6 +46,7 @@ export default function AdminResourcesPage() {
   }, [])
 
   async function checkAdminAndLoad() {
+    const supabase = createClient()
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -69,6 +69,7 @@ export default function AdminResourcesPage() {
   }
 
   async function loadResources() {
+    const supabase = createClient()
     try {
       const { data } = await supabase
         .from('resources')
@@ -127,6 +128,7 @@ export default function AdminResourcesPage() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
+    const supabase = createClient()
     e.preventDefault()
     if (!formData.title.trim() || !formData.description.trim()) {
       alert('Title and description are required')
@@ -184,6 +186,7 @@ export default function AdminResourcesPage() {
   }
 
   async function handleDelete(id: string) {
+    const supabase = createClient()
     try {
       const { error } = await supabase
         .from('resources')

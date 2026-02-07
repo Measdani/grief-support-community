@@ -38,7 +38,6 @@ export default function AdminBackgroundChecksPage() {
   const [processingId, setProcessingId] = useState<string | null>(null)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -46,6 +45,7 @@ export default function AdminBackgroundChecksPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -72,6 +72,7 @@ export default function AdminBackgroundChecksPage() {
   }
 
   async function loadApplications() {
+    const supabase = createClient()
     try {
       const query = supabase
         .from('background_check_applications')
@@ -118,7 +119,7 @@ export default function AdminBackgroundChecksPage() {
       setLoading(true)
       loadApplications()
     }
-  }, [filter])
+  }, [filter, isAdmin])
 
   async function handleApprove(app: BackgroundCheckApplication) {
     setProcessingId(app.id)

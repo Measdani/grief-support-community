@@ -20,7 +20,6 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -29,6 +28,7 @@ export default function UsersPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -47,6 +47,7 @@ export default function UsersPage() {
   }
 
   async function loadUsers() {
+    const supabase = createClient()
     try {
       let query = supabase
         .from('profiles')
@@ -69,6 +70,7 @@ export default function UsersPage() {
   }
 
   async function updateVerificationStatus(userId: string, status: string) {
+    const supabase = createClient()
     try {
       const { error } = await supabase
         .from('profiles')

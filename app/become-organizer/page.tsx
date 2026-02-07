@@ -19,7 +19,6 @@ export default function BecomeOrganizerPage() {
   const [certifications, setCertifications] = useState('')
   const [backgroundConsent, setBackgroundConsent] = useState(false)
 
-  const supabase = createClient()
   const router = useRouter()
 
   const VERIFICATION_FEE = 4999 // $49.99
@@ -29,6 +28,7 @@ export default function BecomeOrganizerPage() {
   }, [])
 
   async function checkUser() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -62,6 +62,7 @@ export default function BecomeOrganizerPage() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
+    const supabase = createClient()
     e.preventDefault()
     if (!user || !backgroundConsent) return
 

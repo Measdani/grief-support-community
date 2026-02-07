@@ -32,7 +32,6 @@ export default function AdminStorePage() {
     status: 'draft' as ProductStatus,
   })
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -40,6 +39,7 @@ export default function AdminStorePage() {
   }, [])
 
   async function checkAdminAndLoad() {
+    const supabase = createClient()
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -62,6 +62,7 @@ export default function AdminStorePage() {
   }
 
   async function loadProducts() {
+    const supabase = createClient()
     try {
       const { data } = await supabase
         .from('store_products')
@@ -108,6 +109,7 @@ export default function AdminStorePage() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
+    const supabase = createClient()
     e.preventDefault()
     if (!formData.name.trim() || !formData.description.trim()) {
       alert('Name and description are required')
@@ -242,6 +244,7 @@ export default function AdminStorePage() {
   }
 
   async function handleDelete(id: string) {
+    const supabase = createClient()
     try {
       const { error } = await supabase
         .from('store_products')

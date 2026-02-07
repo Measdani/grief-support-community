@@ -14,7 +14,6 @@ export default function ResourceSubmissionsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -22,6 +21,7 @@ export default function ResourceSubmissionsPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -48,6 +48,7 @@ export default function ResourceSubmissionsPage() {
   }
 
   async function loadSubmissions() {
+    const supabase = createClient()
     try {
       const { data, error } = await supabase
         .from('resource_submissions')
@@ -64,6 +65,7 @@ export default function ResourceSubmissionsPage() {
   }
 
   async function deleteSubmission(submissionId: string) {
+    const supabase = createClient()
     setDeletingId(submissionId)
     try {
       const { error } = await supabase

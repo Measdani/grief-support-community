@@ -13,11 +13,11 @@ export default function UpdatePassword() {
   const [message, setMessage] = useState<string | null>(null)
   const [isValidSession, setIsValidSession] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
     // Check if user has a valid password reset session
     const checkSession = async () => {
+      const supabase = createClient()
       const {
         data: { user },
       } = await supabase.auth.getUser()
@@ -30,9 +30,10 @@ export default function UpdatePassword() {
     }
 
     checkSession()
-  }, [supabase.auth])
+  }, [])
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
+    const supabase = createClient()
     e.preventDefault()
     setError(null)
     setMessage(null)

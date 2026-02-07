@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 export default function MeetupsPage() {
   const [meetups, setMeetups] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -15,11 +14,13 @@ export default function MeetupsPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) router.push('/auth/login')
   }
 
   async function loadMeetups() {
+    const supabase = createClient()
     const { data } = await supabase
       .from('meetups')
       .select('*')
@@ -29,6 +30,7 @@ export default function MeetupsPage() {
   }
 
   async function updateStatus(id: string, status: string) {
+    const supabase = createClient()
     await supabase.from('meetups').update({ status }).eq('id', id)
     setMeetups(meetups.map(m => m.id === id ? { ...m, status } : m))
   }

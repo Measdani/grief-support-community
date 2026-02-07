@@ -15,7 +15,6 @@ export default function AdvertisingInquiriesPage() {
   const [adminNotes, setAdminNotes] = useState('')
   const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -23,6 +22,7 @@ export default function AdvertisingInquiriesPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -49,6 +49,7 @@ export default function AdvertisingInquiriesPage() {
   }
 
   async function loadInquiries() {
+    const supabase = createClient()
     try {
       let query = supabase
         .from('advertising_inquiries')
@@ -71,6 +72,7 @@ export default function AdvertisingInquiriesPage() {
   }
 
   async function updateInquiryStatus(inquiryId: string, newStatus: string) {
+    const supabase = createClient()
     setUpdatingId(inquiryId)
     try {
       const { error } = await supabase
@@ -100,6 +102,7 @@ export default function AdvertisingInquiriesPage() {
   }
 
   async function convertToSponsor(inquiry: AdvertisingInquiry) {
+    const supabase = createClient()
     const slug = inquiry.company_name.toLowerCase().replace(/\s+/g, '-')
     try {
       const { error } = await supabase

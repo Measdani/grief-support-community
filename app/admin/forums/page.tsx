@@ -32,7 +32,6 @@ export default function ForumModerationPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -40,6 +39,7 @@ export default function ForumModerationPage() {
   }, [selectedCategory, searchTerm])
 
   async function checkAdminAndLoad() {
+    const supabase = createClient()
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -64,6 +64,7 @@ export default function ForumModerationPage() {
   }
 
   async function loadCategories() {
+    const supabase = createClient()
     try {
       const { data } = await supabase
         .from('forum_categories')
@@ -78,6 +79,7 @@ export default function ForumModerationPage() {
   }
 
   async function loadTopics() {
+    const supabase = createClient()
     try {
       setLoading(true)
 
@@ -111,6 +113,7 @@ export default function ForumModerationPage() {
   }
 
   async function updateTopic(id: string, updates: any) {
+    const supabase = createClient()
     try {
       const { error: err } = await supabase
         .from('forum_topics')
@@ -127,6 +130,7 @@ export default function ForumModerationPage() {
   }
 
   async function deleteTopic(id: string) {
+    const supabase = createClient()
     try {
       const { error: err } = await supabase
         .from('forum_topics')

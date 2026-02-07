@@ -27,13 +27,12 @@ export default function OrganizerApplicationsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedApp, setSelectedApp] = useState<Application | null>(null)
 
-  const supabase = createClient()
-
   useEffect(() => {
     loadApplications()
   }, [])
 
   async function loadApplications() {
+    const supabase = createClient()
     try {
       const { data, error } = await supabase
         .from('organizer_applications')
@@ -54,6 +53,7 @@ export default function OrganizerApplicationsPage() {
   }
 
   async function approveApplication(appId: string) {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     const { error } = await supabase
@@ -73,6 +73,7 @@ export default function OrganizerApplicationsPage() {
   }
 
   async function rejectApplication(appId: string, reason: string) {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     const { error } = await supabase

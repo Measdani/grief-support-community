@@ -25,7 +25,6 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -33,6 +32,7 @@ export default function AdminPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')
@@ -62,6 +62,7 @@ export default function AdminPage() {
   }
 
   async function loadStats() {
+    const supabase = createClient()
     try {
       // Get user counts
       const { count: totalUsers } = await supabase

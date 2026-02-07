@@ -26,7 +26,6 @@ export default function ForumCategoriesPage() {
     is_active: true,
   })
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -34,6 +33,7 @@ export default function ForumCategoriesPage() {
   }, [])
 
   async function checkAdminAndLoad() {
+    const supabase = createClient()
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -56,6 +56,7 @@ export default function ForumCategoriesPage() {
   }
 
   async function loadCategories() {
+    const supabase = createClient()
     try {
       setLoading(true)
       const { data, error: err } = await supabase
@@ -112,6 +113,7 @@ export default function ForumCategoriesPage() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
+    const supabase = createClient()
     e.preventDefault()
 
     if (!formData.name.trim()) {
@@ -176,6 +178,7 @@ export default function ForumCategoriesPage() {
   }
 
   async function deleteCategory(id: string) {
+    const supabase = createClient()
     try {
       const { error: err } = await supabase
         .from('forum_categories')
@@ -192,6 +195,7 @@ export default function ForumCategoriesPage() {
   }
 
   async function moveCategory(id: string, direction: 'up' | 'down') {
+    const supabase = createClient()
     const index = categories.findIndex(c => c.id === id)
     if (
       (direction === 'up' && index === 0) ||

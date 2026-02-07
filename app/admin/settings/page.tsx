@@ -18,7 +18,6 @@ export default function AdminSettingsPage() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -26,6 +25,7 @@ export default function AdminSettingsPage() {
   }, [])
 
   async function checkAdmin() {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       router.push('/auth/login')

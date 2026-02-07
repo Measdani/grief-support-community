@@ -25,13 +25,12 @@ export default function AdminReportsPage() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<string>('pending')
 
-  const supabase = createClient()
-
   useEffect(() => {
     loadReports()
   }, [filter])
 
   async function loadReports() {
+    const supabase = createClient()
     setLoading(true)
     try {
       let query = supabase
@@ -59,6 +58,7 @@ export default function AdminReportsPage() {
   }
 
   async function updateReportStatus(reportId: string, status: string, actionTaken?: string) {
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     const { error } = await supabase
