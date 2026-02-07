@@ -20,6 +20,11 @@ export interface UserProfile {
   bio: string | null
   profile_image_url: string | null
 
+  // Emergency Contact
+  emergency_contact_name: string | null
+  emergency_contact_phone: string | null
+  emergency_contact_relationship: string | null
+
   // Verification
   verification_status: VerificationStatus
   email_verified_at: string | null
