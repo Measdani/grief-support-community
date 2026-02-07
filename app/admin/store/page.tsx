@@ -143,7 +143,7 @@ export default function AdminStorePage() {
         if (!previewResult.success) {
           throw new Error(`Preview image upload failed: ${previewResult.error}`)
         }
-        previewImageUrl = previewResult.url
+        previewImageUrl = previewResult.url!
 
         // Upload digital asset if provided
         if (digitalAssetFile) {
@@ -151,7 +151,7 @@ export default function AdminStorePage() {
           if (!digitalResult.success) {
             console.warn(`Digital asset upload failed: ${digitalResult.error}`)
           } else {
-            digitalAssetPath = digitalResult.url
+            digitalAssetPath = digitalResult.url!
           }
         }
 
@@ -199,7 +199,7 @@ export default function AdminStorePage() {
         if (previewImageFile) {
           const uploadResult = await uploadProductAsset(previewImageFile, productId!, 'preview')
           if (uploadResult.success) {
-            previewImageUrl = uploadResult.url
+            previewImageUrl = uploadResult.url!
           } else {
             console.error('Preview image upload failed:', uploadResult.error)
           }
@@ -208,7 +208,7 @@ export default function AdminStorePage() {
         if (digitalAssetFile) {
           const uploadResult = await uploadProductAsset(digitalAssetFile, productId!, 'digital')
           if (uploadResult.success) {
-            digitalAssetPath = uploadResult.url
+            digitalAssetPath = uploadResult.url!
           } else {
             console.error('Digital asset upload failed:', uploadResult.error)
           }
