@@ -163,7 +163,7 @@ export default function MessagesPage() {
                     </p>
                   </div>
 
-                  {conversation.participant_info?.[0]?.unread_count > 0 && (
+                  {conversation.participant_info && conversation.participant_info[0]?.unread_count > 0 && (
                     <div className="bg-blue-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">
                       {conversation.participant_info[0].unread_count}
                     </div>
