@@ -67,7 +67,7 @@ export default function CreateMeetupPage() {
       }
 
       // Allow admins to create meetups
-      const isAdmin = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.includes(user.email)
+      const isAdmin = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '').includes(user.email ?? '')
 
       if (!isAdmin) {
         const { data: profile } = await supabase
