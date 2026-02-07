@@ -64,7 +64,7 @@ export default function MeetupsPage() {
         })
 
         // Don't show verification modals for admins or fully verified users
-        const isAdmin = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.includes(user.email)
+        const isAdmin = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '').includes(user.email ?? '')
         const isFullyVerified = profile.verification_status === 'meetup_organizer'
 
         // Show modal if ID is not verified (and not an admin)
@@ -489,7 +489,7 @@ export default function MeetupsPage() {
           <div className="space-y-4">
             {filteredMeetups.map((meetup) => {
               const userRsvp = userRsvps[meetup.id]
-              const isFull = meetup.max_attendees && meetup.attendee_count >= meetup.max_attendees
+              const isFull = meetup.max_attendees ? meetup.attendee_count >= meetup.max_attendees : false
 
               return (
                 <div
