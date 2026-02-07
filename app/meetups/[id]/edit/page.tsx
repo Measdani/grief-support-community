@@ -85,7 +85,7 @@ export default function EditMeetupPage() {
       }
 
       // Check organizer status (admins can always edit)
-      const isAdmin = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.includes(user.email)
+      const isAdmin = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').includes(user.email || '')
 
       if (!isAdmin) {
         const { data: profile } = await supabase
