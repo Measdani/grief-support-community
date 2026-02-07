@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 import { AdvertisingInquiry } from '@/lib/types/sponsor'
 export const dynamic = 'force-dynamic'
 
-export const dynamic = 'force-dynamic'
 
 export default function AdvertisingInquiriesPage() {
   const [inquiries, setInquiries] = useState<AdvertisingInquiry[]>([])

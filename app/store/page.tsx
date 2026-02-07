@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useCart } from '@/lib/context/CartContext'
 import { useRouter, useSearchParams } from 'next/navigation'
-export const dynamic = 'force-dynamic'
 
 interface Product {
   id: string

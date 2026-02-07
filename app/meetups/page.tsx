@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
-export const dynamic = 'force-dynamic'
   MeetupWithOrganizer,
   LossCategory,
   MeetupFormat,

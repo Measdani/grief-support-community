@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { ForumCategory } from '@/lib/types/forum'
-export const dynamic = 'force-dynamic'
 
 interface SearchResult {
   id: string

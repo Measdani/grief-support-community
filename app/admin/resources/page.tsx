@@ -13,7 +13,6 @@ export const dynamic = 'force-dynamic'
   resourceCategoryLabels,
 } from '@/lib/types/resource'
 
-export const dynamic = 'force-dynamic'
 
 export default function AdminResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([])

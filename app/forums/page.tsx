@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { ForumCategory, ForumTopicWithAuthor } from '@/lib/types/forum'
-export const dynamic = 'force-dynamic'
 
 export default function ForumsPage() {
   const [categories, setCategories] = useState<ForumCategory[]>([])

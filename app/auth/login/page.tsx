@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-export const dynamic = 'force-dynamic'
 
 export default function Login() {
   const [email, setEmail] = useState('')

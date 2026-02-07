@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Sponsor, SponsorTier } from '@/lib/types/sponsor'
-export const dynamic = 'force-dynamic'
 
 export default function SponsorsPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([])

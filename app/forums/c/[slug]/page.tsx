@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { ForumCategory, ForumTopicWithAuthor } from '@/lib/types/forum'
-export const dynamic = 'force-dynamic'
 
 export default function ForumCategoryPage() {
   const [category, setCategory] = useState<ForumCategory | null>(null)

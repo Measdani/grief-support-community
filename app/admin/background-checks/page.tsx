@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-export const dynamic = 'force-dynamic'
 
 interface BackgroundCheckApplication {
   id: string

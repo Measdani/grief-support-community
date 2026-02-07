@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-export const dynamic = 'force-dynamic'
 
 interface Profile {
   subscription_tier: string

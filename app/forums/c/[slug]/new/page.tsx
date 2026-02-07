@@ -8,7 +8,6 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { ForumCategory } from '@/lib/types/forum'
 import { generateUniqueSlug } from '@/lib/utils/slugify'
-export const dynamic = 'force-dynamic'
 
 export default function NewTopicPage() {
   const [category, setCategory] = useState<ForumCategory | null>(null)

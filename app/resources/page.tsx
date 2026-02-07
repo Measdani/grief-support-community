@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import SubmitResourceForm from './SubmitResourceForm'
 import {
-export const dynamic = 'force-dynamic'
   Resource,
   ResourceType,
   ResourceCategory,

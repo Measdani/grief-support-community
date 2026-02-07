@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { Sponsor, sponsorTierInfo } from '@/lib/types/sponsor'
-export const dynamic = 'force-dynamic'
 
 export default function SponsorsPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([])

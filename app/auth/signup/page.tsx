@@ -7,7 +7,6 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createUserProfile } from '@/lib/actions/profile'
-export const dynamic = 'force-dynamic'
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
