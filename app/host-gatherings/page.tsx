@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -33,15 +33,16 @@ export default function HostGatheringsPage() {
     zipCode: '',
   })
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
   const router = useRouter()
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkAuth()
   }, [])
 
   async function checkAuth() {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     if (!user) {
       router.push('/auth/login')
       return
@@ -52,7 +53,7 @@ export default function HostGatheringsPage() {
 
   async function loadProfile(userId: string) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseRef.current
         .from('profiles')
         .select(
           'id, subscription_tier, background_check_status, background_check_approved_at, background_check_expires_at, background_check_notes'
@@ -77,7 +78,7 @@ export default function HostGatheringsPage() {
     setMessage(null)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await supabaseRef.current.auth.getUser()
       if (!user) {
         router.push('/auth/login')
         return

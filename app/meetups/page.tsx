@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -35,20 +35,21 @@ export default function MeetupsPage() {
   const [categoryFilter, setCategoryFilter] = useState<LossCategory | 'all'>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
-  const supabase = createClient()
+  const supabaseRef = useRef<any>(null)
 
   useEffect(() => {
+    supabaseRef.current = createClient()
     checkUser()
     loadMeetups()
   }, [formatFilter, categoryFilter])
 
   async function checkUser() {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabaseRef.current.auth.getUser()
     setUser(user)
     if (user) {
       loadUserRsvps(user.id)
       // Fetch user profile to check verification status
-      const { data: profile } = await supabase
+      const { data: profile } = await supabaseRef.current
         .from('profiles')
         .select('verification_status, id_verified_at, meetup_organizer_verified_at')
         .eq('id', user.id)
@@ -83,7 +84,7 @@ export default function MeetupsPage() {
   }
 
   async function loadUserRsvps(userId: string) {
-    const { data } = await supabase
+    const { data } = await supabaseRef.current
       .from('meetup_rsvps')
       .select('meetup_id, status')
       .eq('user_id', userId)
@@ -97,7 +98,7 @@ export default function MeetupsPage() {
 
   async function loadMeetups() {
     try {
-      let query = supabase
+      let query = supabaseRef.current
         .from('meetups')
         .select(`
           *,
@@ -139,7 +140,7 @@ export default function MeetupsPage() {
 
       if (existingRsvp) {
         // Update existing RSVP
-        const { error } = await supabase
+        const { error } = await supabaseRef.current
           .from('meetup_rsvps')
           .update({ status })
           .eq('meetup_id', meetupId)
@@ -148,7 +149,7 @@ export default function MeetupsPage() {
         if (error) throw error
       } else {
         // Create new RSVP
-        const { error } = await supabase
+        const { error } = await supabaseRef.current
           .from('meetup_rsvps')
           .insert({
             meetup_id: meetupId,
@@ -171,7 +172,7 @@ export default function MeetupsPage() {
     if (!user) return
 
     try {
-      const { error } = await supabase
+      const { error } = await supabaseRef.current
         .from('meetup_rsvps')
         .delete()
         .eq('meetup_id', meetupId)
