@@ -38,7 +38,7 @@ export interface ConversationWithParticipant extends Conversation {
     profile_image_url: string | null
     verification_status: string
   }
-  participant_info?: ConversationParticipant
+  participant_info?: ConversationParticipant[]
 }
 
 export interface MessageWithAuthor extends Message {
