@@ -1,13 +1,20 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-)
-
 export async function GET(request: Request) {
   try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!url || !key) {
+      return NextResponse.json(
+        { error: 'Service configuration error' },
+        { status: 500 }
+      )
+    }
+
+    const supabase = createClient(url, key)
+
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')?.toLowerCase()
     const type = searchParams.get('type') || 'all'
