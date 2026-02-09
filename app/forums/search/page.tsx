@@ -3,6 +3,7 @@
 export const dynamic = 'force-dynamic'
 
 import { useEffect, useState, useRef } from 'react'
+import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -31,7 +32,7 @@ interface SearchResult {
 
 type SortOption = 'relevance' | 'latest' | 'replies' | 'views'
 
-export default function ForumSearchPage() {
+function ForumSearchContent() {
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -50,7 +51,7 @@ export default function ForumSearchPage() {
     if (q.trim()) {
       performSearch(q)
     }
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     if (searchTerm.trim()) {
@@ -302,5 +303,13 @@ export default function ForumSearchPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function ForumSearchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-12"><div className="max-w-4xl mx-auto px-4 text-center text-slate-600">Loading...</div></div>}>
+      <ForumSearchContent />
+    </Suspense>
   )
 }
