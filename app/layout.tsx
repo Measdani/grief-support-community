@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "@/lib/context/CartContext";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Holding Space Together - Find Support & Connection",
@@ -18,6 +19,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
         </CartProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
