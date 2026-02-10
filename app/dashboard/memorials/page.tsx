@@ -83,7 +83,7 @@ export default async function MemorialsPage() {
               Honor and remember loved ones who have passed
             </p>
           </div>
-          {profile?.verification_status && ['email_verified', 'id_verified', 'meetup_organizer'].includes(profile.verification_status) && (
+          {profile?.verification_status && ['email_verified', 'id_verified', 'meetup_organizer', 'admin'].includes(profile.verification_status) && (
             <Link
               href="/dashboard/memorials/create"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
@@ -174,7 +174,7 @@ export default async function MemorialsPage() {
             <p className="text-slate-600 mb-6">
               Be the first to create a memorial to honor a loved one
             </p>
-            {profile?.verification_status && ['email_verified', 'id_verified', 'meetup_organizer'].includes(profile.verification_status) && (
+            {profile?.verification_status && ['email_verified', 'id_verified', 'meetup_organizer', 'admin'].includes(profile.verification_status) && (
               <Link
                 href="/dashboard/memorials/create"
                 className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
