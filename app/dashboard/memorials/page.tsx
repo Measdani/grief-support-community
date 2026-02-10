@@ -16,14 +16,20 @@ export default async function MemorialsPage() {
   }
 
   // Fetch user profile
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+  let profile = null
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
 
-  if (profileError) {
-    console.error('Profile fetch error:', profileError)
+    if (error) {
+      console.error('Profile fetch error:', error)
+    }
+    profile = data
+  } catch (err) {
+    console.error('Profile fetch exception:', err)
   }
 
   // Fetch all public memorials or user's own memorials
